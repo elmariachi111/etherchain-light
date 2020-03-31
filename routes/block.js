@@ -19,9 +19,7 @@ router.get('/:block', function(req, res, next) {
       if (!result) {
         return next({name : "BlockNotFoundError", message : "Block not found!"});
       }
-      web3.trace.block(result.number, function(err, traces) {
-        callback(err, result, traces);
-      });
+      callback(null, result, null);
     }
   ], function(err, block, traces) {
     if (err) {

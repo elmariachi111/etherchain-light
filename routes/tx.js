@@ -78,16 +78,18 @@ router.get('/:tx', function(req, res, next) {
       web3.eth.getTransactionReceipt(result.hash, function(err, receipt) {
         callback(err, result, receipt);
       });
-    }, function(tx, receipt, callback) {  
-      web3.trace.transaction(tx.hash, function(err, traces) {
-        callback(err, tx, receipt, traces);
-      });
-    }, function(tx, receipt, traces, callback) {
-      db.get(tx.to, function(err, value) {
-        callback(null, tx, receipt, traces, value);
-      });
+    }, function(tx, receipt, callback) {
+      
+      if (tx.to == null) {
+        callback(null, tx, receipt, null);
+      } else {
+        db.get(tx.to, function(err, value) {
+          callback(null, tx, receipt, value);
+        });
+      }
+      
     }
-  ], function(err, tx, receipt, traces, source) {
+  ], function(err, tx, receipt, source) {
     if (err) {
       return next(err);
     }
@@ -107,6 +109,8 @@ router.get('/:tx', function(req, res, next) {
     tx.traces = [];
     tx.failed = false;
     tx.gasUsed = 0;
+    const traces = null;
+
     if (traces != null) {
     traces.forEach(function(trace) {
         tx.traces.push(trace);

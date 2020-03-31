@@ -81,14 +81,10 @@ router.get('/:account', function(req, res, next) {
       
       
     }, function(callback) {
-      web3.trace.filter({ "fromBlock": "0x" + data.fromBlock.toString(16), "fromAddress": [ req.params.account ] }, function(err, traces) {
-        callback(err, traces);
-      });
+      callback(null, []);
     }, function(tracesSent, callback) {
-      data.tracesSent = tracesSent;
-      web3.trace.filter({ "fromBlock": "0x" + data.fromBlock.toString(16), "toAddress": [ req.params.account ] }, function(err, traces) {
-        callback(err, traces);
-      });
+      data.tracesSent = [];
+      callback(null, null);
     }
   ], function(err, tracesReceived) {
     if (err) {
@@ -96,7 +92,7 @@ router.get('/:account', function(req, res, next) {
     }
     
     data.address = req.params.account;
-    data.tracesReceived = tracesReceived;
+    data.tracesReceived = [];
     
     var blocks = {};
     data.tracesSent.forEach(function(trace) {
