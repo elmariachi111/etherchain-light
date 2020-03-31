@@ -1,8 +1,11 @@
-version: '2.0'
+version: "3.7"
 
 services:
   etherchain-light:
     build: .
     restart: always
+    volumes:
+      - .:/app
+    command: npm run start
     ports:
       - 3000:3000

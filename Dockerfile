@@ -1,3 +1,5 @@
-FROM node:8.7.0-onbuild
+FROM node:13
+
+WORKDIR /app
 
 EXPOSE 3000
